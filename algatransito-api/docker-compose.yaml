@@ -1,0 +1,33 @@
+services:
+  algatransito:
+    image: algatransito:latest
+    container_name: algatransito
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=mysql
+      - DATABASE_URL=mysql://alga :1707@mysql:3306/algatransito
+      - SECRET_KEY=your_secret_key_here
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: algatransito
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 1707
+    ports:
+        - "3307:3306"
+    networks:
+        - algatransito_network
+
+
+networks:
+  algatransito_network:
+    driver: bridge
